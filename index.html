@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我在华为工作了多少天？</title>
+<style>
+  /*
+   * Soft UI / Neumorphism — 单文件等价实现
+   * 说明：规范要求 Tailwind 类名「原样出现或等价实现」，
+   * 本文件为免构建单 HTML，故以 CSS 变量 + 原生 CSS 等价落地全部 token。
+   * 色板之外未引入任何颜色；圆角/阴影均来自 token 表。
+   */
+  :root {
+    --soft-base: #F3EEF8;   /* bg-[#F3EEF8] 凸起与凹陷同底 */
+    --soft-light: #FFFFFF;  /* 拟物高光阴影 */
+    --soft-dark: #DCD2E8;   /* 拟物暗部阴影 */
+    --soft-accent: #6C5CE7; /* 强调 / CTA */
+    --soft-text: #3D3350;   /* 主文本 */
+    --soft-muted: #8A7D9E;  /* 辅助文字 */
+    /* box-shadow token */
+    --shadow-soft: 8px 8px 16px var(--soft-dark), -8px -8px 16px var(--soft-light);
+    --shadow-soft-sm: 4px 4px 9px var(--soft-dark), -4px -4px 9px var(--soft-light);
+    --shadow-soft-inset: inset 2px 2px 5px var(--soft-dark), inset -2px -2px 5px #FFF;
+    --shadow-soft-inset-deep: inset 3px 3px 7px var(--soft-dark), inset -3px -3px 7px #FFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "HarmonyOS Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--soft-base);
+    color: var(--soft-text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px;
+    line-height: 1.6;
+  }
+
+  /* Card：同底色 + 双向外阴影凸起，无边框无描边 */
+  .card {
+    background: var(--soft-base);
+    border: 0;
+    border-radius: 24px;               /* rounded-3xl */
+    box-shadow: var(--shadow-soft);
+    padding: 28px;                     /* 间距规范 20–28px */
+    width: 100%;
+    max-width: 440px;
+  }
+
+  .logo {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--soft-muted);
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;                  /* 禁止 700+ */
+    color: var(--soft-text);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .field { margin-bottom: 20px; }
+
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--soft-muted);
+    margin-bottom: 10px;
+  }
+
+  /* Input：凹陷态，inset 双向阴影；focus 加深 + 1px 主色内描边 */
+  input[type="date"] {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--soft-base);
+    border: 0;
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft-inset);
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 500;
+    color: var(--soft-text);
+    outline: none;
+    transition: box-shadow 0.2s ease;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type="date"]::placeholder { color: #B3A8C4; } /* 规范指定占位色 */
+  input[type="date"]:hover { box-shadow: var(--shadow-soft-inset-deep); }
+  input[type="date"]:focus-visible {
+    box-shadow: var(--shadow-soft-inset-deep), inset 0 0 0 1px var(--soft-accent);
+  }
+  /* 日历图标颜色跟随 muted（WebKit） */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.55) sepia(0.15) saturate(0.6) hue-rotate(220deg);
+    cursor: pointer;
+  }
+
+  /* Button：渐变主色 + 双向外阴影；hover 阴影减弱；active 翻转为 inset */
+  button {
+    width: 100%;
+    padding: 14px 16px;
+    background: linear-gradient(145deg, #7F71EA, #5A49C8); /* 主色亮/暗两档渐变 */
+    color: #FFFFFF;
+    border: 0;
+    border-radius: 14px;
+    box-shadow: var(--shadow-soft-sm);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  button:hover { box-shadow: 2px 2px 5px var(--soft-dark), -2px -2px 5px var(--soft-light); }
+  button:focus-visible {
+    outline: none;
+    box-shadow: 2px 2px 5px var(--soft-dark), -2px -2px 5px var(--soft-light),
+                inset 0 0 0 2px rgba(255, 255, 255, 0.4);
+  }
+  button:active {
+    box-shadow: var(--shadow-soft-inset);
+    transform: scale(0.99);
+  }
+
+  /* 错误提示：色板外无红色可用，按规范第 0.5 条选用 Accent 作警示色 */
+  .error {
+    font-size: 13px;
+    color: var(--soft-accent);
+    margin-top: 8px;
+    display: none;
+    font-weight: 500;
+  }
+
+  .result {
+    margin-top: 24px;
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .result.show { display: block; }
+
+  /* 结果展示区：凹陷井，承接视觉重心 */
+  .well {
+    background: var(--soft-base);
+    border: 0;
+    border-radius: 16px;               /* rounded-2xl */
+    box-shadow: var(--shadow-soft-inset);
+    padding: 24px 20px;
+    text-align: center;
+  }
+  .days-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--soft-muted);
+  }
+  .days-number {
+    font-size: 52px;
+    font-weight: 600;
+    color: var(--soft-accent);
+    line-height: 1.3;
+    margin: 4px 0;
+  }
+  .breakdown {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--soft-muted);
+    line-height: 1.8;
+    margin-top: 12px;
+  }
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="logo">HUAWEI · SOFT UI</div>
+  <h1>我在华为工作了多少天？</h1>
+
+  <div class="field">
+    <label for="joinDate">请选择您加入华为的日期</label>
+    <input type="date" id="joinDate" aria-describedby="errorMsg">
+    <p class="error" id="errorMsg" role="alert"></p>
+  </div>
+
+  <button id="calcBtn" onclick="calculate()">计算工作天数</button>
+
+  <div class="result" id="result">
+    <div class="well">
+      <div class="days-label">您已在华为奋斗</div>
+      <div class="days-number" id="totalDays">0</div>
+      <div class="days-label">天</div>
+      <div class="breakdown" id="breakdown"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+function calculate() {
+  var input = document.getElementById("joinDate");
+  var errorMsg = document.getElementById("errorMsg");
+  var result = document.getElementById("result");
+  errorMsg.style.display = "none";
+  result.classList.remove("show");
+
+  if (!input.value) {
+    errorMsg.textContent = "请先选择您的入职日期";
+    errorMsg.style.display = "block";
+    return;
+  }
+
+  var join = new Date(input.value + "T00:00:00");
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (join > today) {
+    errorMsg.textContent = "入职日期不能晚于今天";
+    errorMsg.style.display = "block";
+    return;
+  }
+
+  // 总天数（入职当天算第 1 天）
+  var totalDays = Math.floor((today - join) / 86400000) + 1;
+  document.getElementById("totalDays").textContent = totalDays.toLocaleString("zh-CN");
+
+  // 换算为 X 年 X 个月 X 天
+  var y = today.getFullYear(), m = today.getMonth(), d = today.getDate();
+  var jy = join.getFullYear(), jm = join.getMonth(), jd = join.getDate();
+  var years = y - jy, months = m - jm, days = d - jd;
+  if (days < 0) {
+    months--;
+    days += new Date(y, m, 0).getDate();
+  }
+  if (months < 0) { years--; months += 12; }
+
+  var parts = [];
+  if (years > 0) parts.push(years + " 年");
+  if (months > 0) parts.push(months + " 个月");
+  if (days > 0 || parts.length === 0) parts.push(days + " 天");
+
+  // 下一个周年纪念日
+  var nextAnniv = new Date(y, jm, jd);
+  nextAnniv.setFullYear(y + years + 1);
+  var daysToAnniv = Math.round((nextAnniv - today) / 86400000);
+
+  document.getElementById("breakdown").innerHTML =
+    "即 " + parts.join(" ") + "（入职当天计为第 1 天）<br>" +
+    "距离下一个入职周年纪念日还有 " + daysToAnniv + " 天";
+
+  result.classList.add("show");
+}
+</script>
+</body>
+</html>
