@@ -248,9 +248,8 @@ function calculate() {
   if (months > 0) parts.push(months + " 个月");
   if (days > 0 || parts.length === 0) parts.push(days + " 天");
 
-  // 下一个周年纪念日
-  var nextAnniv = new Date(y, jm, jd);
-  nextAnniv.setFullYear(y + years + 1);
+  // 下一个周年纪念日：入职年 + 已满整年数 + 1
+  var nextAnniv = new Date(jy + years + 1, jm, jd);
   var daysToAnniv = Math.round((nextAnniv - today) / 86400000);
 
   document.getElementById("breakdown").innerHTML =
